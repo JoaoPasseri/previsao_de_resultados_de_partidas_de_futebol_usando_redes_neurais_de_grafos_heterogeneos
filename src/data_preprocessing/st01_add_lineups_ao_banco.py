@@ -1,6 +1,13 @@
-import st00_add_fixture_ao_banco as st00
 from pandas import DataFrame
 import time
+
+from dotenv import load_dotenv
+import os
+import sys
+load_dotenv()
+sys.path.append(os.getenv('MODULE_PATH_data_preprocessing'))
+
+import st00_add_fixture_ao_banco as st00
 
 def main():
 
@@ -10,7 +17,7 @@ def main():
     print(f'Ainda restam {quantidade_jogos} requisicoes na API')
     
     # Criando instancia de comunicacao com o banco
-    caminho = r'C:\Users\jvpma\Desktop\Soccer Outcomes with Graph 2\futebol.db'
+    caminho = os.getenv('MODULE_PATH_DATA') + 'futebol.db'
     SoccerPipeline = st00.SoccerPipeline(caminho=caminho)
 
     # Carregando jogos para acrescentar jogadores

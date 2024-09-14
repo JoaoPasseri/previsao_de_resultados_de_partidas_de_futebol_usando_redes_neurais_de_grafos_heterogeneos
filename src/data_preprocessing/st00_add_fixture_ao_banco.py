@@ -4,6 +4,11 @@ import http.client
 import json
 import duckdb as duckdb
 import requests
+from dotenv import load_dotenv
+import os
+import sys
+
+load_dotenv()
 
 def abrir_arquivo_json(caminho_arquivo: str) -> Dict:
 
@@ -14,8 +19,9 @@ def abrir_arquivo_json(caminho_arquivo: str) -> Dict:
 def get_football_fixtures(parameters: Dict) -> Dict:
     # Defina os cabeçalhos da requisição
     headers = {
-        'x-rapidapi-host': "v3.football.api-sports.io",
-        'x-rapidapi-key': "1ffa12371b03caaede314ad7e8ec8ffa"
+        'x-rapidapi-host': os.getenv('x_rapidapi_host'),
+        
+        'x-rapidapi-key': os.getenv('x_rapidapi_key')
     }
 
     # Crie uma conexão com a API
@@ -38,8 +44,8 @@ def get_football_fixtures(parameters: Dict) -> Dict:
 def get_football_lineups(parameters: Dict) -> Dict:
     # Defina os cabeçalhos da requisição
     headers = {
-        'x-rapidapi-host': "v3.football.api-sports.io",
-        'x-rapidapi-key': "1ffa12371b03caaede314ad7e8ec8ffa"
+        'x-rapidapi-host': os.getenv('x_rapidapi_host'),
+        'x-rapidapi-key': os.getenv('x_rapidapi_key')
     }
 
     # Crie uma conexão com a API
@@ -62,8 +68,8 @@ def get_football_lineups(parameters: Dict) -> Dict:
 def get_football_status() -> Dict:
     # Defina os cabeçalhos da requisição
     headers = {
-        'x-rapidapi-host': "v3.football.api-sports.io",
-        'x-rapidapi-key': "1ffa12371b03caaede314ad7e8ec8ffa"
+        'x-rapidapi-host': os.getenv('x_rapidapi_host'),
+        'x-rapidapi-key': os.getenv('x_rapidapi_key')
     }
 
     # Faça a requisição GET com os cabeçalhos e a URL completa
@@ -220,11 +226,11 @@ class SoccerPipeline:
 if __name__== "__main__":
 
     # carregando principais ligas
-    caminho = 'main_leagues.json'
+    caminho = os.getenv('MODULE_PATH_DATA') + 'main_leagues.json'
     main_leagues = abrir_arquivo_json(caminho)
 
     # carregando parametros da requisicao
-    caminho = 'pull_fixtures.json'
+    caminho = os.getenv('MODULE_PATH_DATA') + 'pull_fixtures.json'
     parameters = abrir_arquivo_json(caminho)
 
     print(main_leagues)
@@ -234,7 +240,7 @@ if __name__== "__main__":
     data = get_football_fixtures(parameters)
 
     # Criando instancia de comunicacao com o banco
-    caminho = r'C:\Users\jvpma\Desktop\Soccer Outcomes with Graph 2\futebol.db'
+    caminho = os.getenv('MODULE_PATH_DATA') + 'futebol.db'
     SoccerPipeline = SoccerPipeline(caminho=caminho)
 
     # Transformando a requisicao no formato da tabela fixture
